@@ -1,0 +1,176 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String          @id @default(uuid())
+  firstName             String          @map("first_name") @db.VarChar(255)
+  secondName            String?         @map("second_name") @db.VarChar(255)
+  email                 String          @unique
+  hash                  String
+  urlImage              String?         @map("url_image") @db.VarChar(255)
+  tel                   String?
+  state                 State?          @relation(fields: [stateId], references: [id])
+  stateId               String          @default(uuid())
+  profile               Profile?        @relation(fields: [profileId], references: [id])
+  profileId             String          @default(uuid())
+  instrument            Instrument?     @relation(fields: [instrumentId], references: [id])
+  instrumentId          String?         @default(uuid())
+  city                  String?         @db.VarChar(255)
+  district              String?         @db.VarChar(255)
+  zipCode               String?         @map("zip_code") @db.VarChar(255)
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  deletedAt             Boolean         @default(false)
+  userMethod            UserMethod[]
+  userGroup             UserGroup[]
+  LessonHistory         LessonHistory[]
+  studentObservation    Observation[]   @relation("studentObservation")
+  instructorObservation Observation[]   @relation("instructorObservation")
+
+  @@map("users")
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(100)
+  slug      String   @db.VarChar(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt Boolean  @default(false)
+  users     User[]
+
+  @@map("profiles")
+}
+
+model State {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(100)
+  slug      String   @db.VarChar(100)
+  postal    String   @db.VarChar(3)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt Boolean  @default(false)
+  User      User[]
+
+  @@map("states")
+}
+
+model UserGroup {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId     String   @default(uuid())
+  groupId    String   @default(uuid())
+  instructor Boolean  @default(false)
+  main       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  deletedAt  Boolean  @default(false)
+
+  @@map("user_to_group")
+}
+
+model Group {
+  id         String      @id @default(uuid())
+  name       String      @db.VarChar(100)
+  slug       String      @db.VarChar(100)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  deletedAt  Boolean     @default(false)
+  groupUsers UserGroup[]
+
+  @@map("groups")
+}
+
+model UserMethod {
+  id        String   @id @default(uuid())
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  method    Method   @relation(fields: [methodId], references: [id], onDelete: Cascade)
+  studentId String   @default(uuid())
+  methodId  String   @default(uuid())
+  main      Boolean  @default(false)
+  lesson    String?  @db.VarChar(20)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt Boolean  @default(false)
+
+  @@map("user_to_method")
+}
+
+model Method {
+  id           String       @id @default(uuid())
+  title        String       @db.VarChar(255)
+  slug         String       @unique
+  description  String?
+  urlImage     String?      @db.VarChar(255)
+  instrument   Instrument?  @relation(fields: [instrumentId], references: [id])
+  instrumentId String?      @default(uuid())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  deletedAt    Boolean      @default(false)
+  UserMethod   UserMethod[]
+
+  @@map("methods")
+}
+
+model LessonHistory {
+  id        String   @id @default(uuid())
+  total     Int
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String   @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("lessons_history")
+}
+
+model Observation {
+  id           String        @id @default(uuid())
+  student      User          @relation(name: "studentObservation", fields: [studentId], references: [id], onDelete: Cascade)
+  studentId    String        @default(uuid())
+  instructor   User          @relation(name: "instructorObservation", fields: [instructorId], references: [id], onDelete: Cascade)
+  instructorId String        @default(uuid())
+  description  String        @db.Text()
+  replyFromId  String?
+  replyFrom    Observation?  @relation("ObservationReply", fields: [replyFromId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies      Observation[] @relation("ObservationReply")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    Boolean       @default(false)
+
+  @@map("observations")
+}
+
+model Instrument {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  family    Family?  @relation(fields: [familyId], references: [id])
+  familyId  String?  @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt Boolean  @default(false)
+  methods   Method[]
+  users     User[]
+
+  @@map("instruments")
+}
+
+model Family {
+  id          String       @id @default(uuid())
+  name        String
+  slug        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   Boolean      @default(false)
+  instruments Instrument[]
+
+  @@map("families")
+}

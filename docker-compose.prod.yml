@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  ability_production:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/home/node/app
+      - /home/node/app/node_modules
+      - /home/node/app/dist

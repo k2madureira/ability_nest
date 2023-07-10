@@ -8,6 +8,6 @@ phases:
     commands:
       - docker build -t nestjs-ability -f ./Dockerfile.prod .
       - docker tag nestjs-ability:latest 469735151043.dkr.ecr.us-east-1.amazonaws.com/nestjs-ability:latest
-  post_buld:
+  post_build:
     commands:
       - docker push 469735151043.dkr.ecr.us-east-1.amazonaws.com/nestjs-ability:latest

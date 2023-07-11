@@ -11,14 +11,14 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SignInService } from './signIn.service';
 
 @ApiTags('Auth')
-@Controller('sign-in')
+@Controller('auth')
 export class SignInController {
   constructor(private signInService: SignInService) {}
 
   @ApiOkResponse({
     type: SignIn.Response,
   })
-  @Post()
+  @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   async createInstrument(
     @Body() body: SignIn.Request,

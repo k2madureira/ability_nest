@@ -8,14 +8,14 @@ import {
 import { SignUpService } from './signUp.service';
 
 @ApiTags('Auth')
-@Controller('sign-up')
+@Controller('auth')
 export class SignUpController {
   constructor(private signUpService: SignUpService) {}
 
   @ApiCreatedResponse({
     type: UserSchema,
   })
-  @Post()
+  @Post('sign-up')
   async createInstrument(@Body() body: SignUp.Request) {
     return this.signUpService.execute(body);
   }

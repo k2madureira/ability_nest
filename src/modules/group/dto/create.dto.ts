@@ -16,5 +16,5 @@ export class Body {
   @ApiProperty()
   @IsOptional()
   @IsArray()
-  users?: UserGroup[];
+  users?: UserGroup;
 }

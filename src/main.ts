@@ -31,9 +31,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(
-    process.env.PORT || config.get('PORT'),
-    'hostname: 0.0.0.0',
-  );
+  await app.listen(process.env.PORT || config.get('PORT'));
 }
 bootstrap();

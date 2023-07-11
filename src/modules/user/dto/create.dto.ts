@@ -79,10 +79,10 @@ export class UserRequest {
   @Validate(manyMain, {
     message: ONE_MAIN,
   })
-  methods?: Methods[];
+  methods?: Methods;
 
   @ApiProperty()
   @IsArray()
   @IsOptional()
-  groups?: Groups[];
+  groups?: Groups;
 }

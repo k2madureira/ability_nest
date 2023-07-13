@@ -12,6 +12,7 @@ import { HomeModule } from '@modules/home/home.module';
 import { StateModule } from '@modules/state/state.module';
 import { PrismaModule } from '@shared/prisma/prisma.module';
 import { HelperModule } from '@shared/helper/helper.module';
+import { EmailModule } from '@shared/mailer/mail.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { HelperModule } from '@shared/helper/helper.module';
     StateModule,
     PrismaModule,
     HelperModule,
+    EmailModule,
   ],
 })
 export class AppModule {}

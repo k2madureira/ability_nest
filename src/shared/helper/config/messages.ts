@@ -2,6 +2,7 @@ export const INVALID_REFRESH_TOKEN =
   'invalid-refresh-token';
 export const INVALID_ACCESS_TOKEN = 'invalid-access-token';
 export const INVALID_CREDENTIALS = 'invalid-credentials';
+export const DIFFERENT_PASSWORDS = 'password-different';
 export const LOGOUT_SUCCESSFUL = 'logout-successful';
 export const ACCESS_DENIED =
   'access-denied-for-this-procedure';

@@ -29,11 +29,6 @@ export class UserRequest {
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
-  password: string;
-
-  @ApiProperty()
-  @IsString()
   @IsOptional()
   urlImage?: string;
 

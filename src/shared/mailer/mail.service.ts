@@ -18,4 +18,17 @@ export class EmailService {
       },
     });
   }
+
+  async tempPassword(user: User, password: string) {
+    await this.mailerService.sendMail({
+      to: user.email,
+      from: 'Ability-password',
+      subject: 'Senha temporária.',
+      template: './forgotPassword',
+      context: {
+        name: user.firstName,
+        password,
+      },
+    });
+  }
 }
